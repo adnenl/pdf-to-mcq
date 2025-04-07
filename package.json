@@ -1,27 +1,41 @@
 {
-  "name": "pdf-to-mcq",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "15.2.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.2.4",
-    "tailwindcss": "^4",
-    "typescript": "^5"
-  }
+	"name": "falling-truth-0c96",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev --turbopack",
+		"build": "next build",
+		"start": "next start",
+		"lint": "next lint",
+		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+		"cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+	},
+	"dependencies": {
+		"@langchain/community": "^0.3.39",
+		"@langchain/core": "^0.3.43",
+		"@langchain/textsplitters": "^0.1.0",
+		"langchain": "^0.3.20",
+		"next": "15.2.4",
+		"pdf-lib": "^1.17.1",
+		"pdf-parse": "^1.1.1",
+		"pdfjs-dist": "^5.1.91",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "^4.20250407.0",
+		"@eslint/eslintrc": "^3",
+		"@opennextjs/cloudflare": "~1.0.0-beta.0 || ^1.0.0",
+		"@tailwindcss/postcss": "^4",
+		"@types/node": "^20",
+		"@types/pdf-parse": "^1.1.5",
+		"@types/react": "^19",
+		"@types/react-dom": "^19",
+		"eslint": "^9",
+		"eslint-config-next": "15.2.4",
+		"tailwindcss": "^4",
+		"typescript": "^5",
+		"wrangler": "^4.7.2"
+	}
 }

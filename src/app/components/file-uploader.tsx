@@ -1,13 +1,27 @@
 "use client";
 import { useState } from "react";
 
+interface MCQuestion {
+  question: string;
+  options: {
+    A: string;
+    B: string;
+    C: string;
+    D: string;
+  };
+  correctAnswer: "A" | "B" | "C" | "D";
+}
+
 export default function FileUploader() {
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [questions, setQuestions] = useState<MCQuestion[]>([]);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     setError(null);
+    setQuestions([]);
 
     if (!selectedFile) return;
 
@@ -23,26 +37,45 @@ export default function FileUploader() {
 
   const processPDF = async () => {
     if (!file) return;
+    
+    setIsLoading(true);
+    setError(null);
+    
     const formData = new FormData();
     formData.append("file", file);
-    await fetch("/api/process-pdf", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to process PDF");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("PDF processed successfully:", data);
-        // Handle the response data as needed
-      })
-      .catch((error) => {
-        console.error("Error processing PDF:", error);
-        setError("Failed to process PDF");
+    
+    try {
+      const response = await fetch("/api", {
+        method: "POST",
+        body: formData,
       });
+      
+      // Get response as text first
+      const responseText = await response.text();
+      
+      // Try to parse as JSON
+      let data;
+      try {
+        data = JSON.parse(responseText);
+      } catch (e) {
+        console.error("Failed to parse response as JSON:", responseText);
+        throw new Error(`Invalid response: ${responseText.substring(0, 100)}...`);
+      }
+      
+      if (!response.ok) {
+        throw new Error(data.error || `Server error: ${response.status}`);
+      }
+      
+      console.log("PDF processed successfully:", data);
+      if (data.questions) {
+        setQuestions(Array.isArray(data.questions) ? data.questions : [data.questions]);
+      }
+    } catch (error) {
+      console.error("Error processing PDF:", error);
+      setError(error instanceof Error ? error.message : "Failed to process PDF");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -89,8 +122,32 @@ export default function FileUploader() {
             onClick={processPDF}
             className="w-full mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
-            Process PDF
+            {isLoading ? "Processing..." : "Process PDF"}
           </button>
+        )}
+
+        {questions.length > 0 && (
+          <div className="mt-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">Generated Questions</h2>
+            <ul className="space-y-6">
+              {questions.map((question, index) => (
+                <li key={index} className="bg-white p-4 rounded-lg shadow">
+                  <p className="font-medium text-gray-900 mb-3">{index + 1}. {question.question}</p>
+                  <div className="space-y-2 ml-4">
+                    {Object.entries(question.options).map(([key, value]) => (
+                      <div key={key} className="flex items-start">
+                        <div className={`flex-shrink-0 w-6 h-6 rounded-full mr-2 flex items-center justify-center 
+                          ${question.correctAnswer === key ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}>
+                          {key}
+                        </div>
+                        <p className="text-gray-700">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
       </div>
     </div>
