@@ -1,7 +1,8 @@
 "use client";
+import { on } from "events";
 import { useState } from "react";
 
-interface MCQuestion {
+export interface MCQuestion {
   question: string;
   options: {
     A: string;
@@ -12,7 +13,9 @@ interface MCQuestion {
   correctAnswer: "A" | "B" | "C" | "D";
 }
 
-export default function FileUploader() {
+export default function FileUploader({ onQuestionsGenerated }: { 
+  onQuestionsGenerated: (questions: MCQuestion[]) => void 
+}) {
   const [file, setFile] = useState<File | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -68,7 +71,9 @@ export default function FileUploader() {
       
       console.log("PDF processed successfully:", data);
       if (data.questions) {
-        setQuestions(Array.isArray(data.questions) ? data.questions : [data.questions]);
+        const questionArray = Array.isArray(data.questions) ? data.questions : [data.questions];
+        setQuestions(questionArray);
+        onQuestionsGenerated(questionArray);
       }
     } catch (error) {
       console.error("Error processing PDF:", error);
