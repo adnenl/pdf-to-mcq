@@ -20,10 +20,15 @@ export async function POST(req: NextRequest) {
     console.log("Extracted chunks:", chunks);
     
     // Send to worker
-    const workerResponse = await fetch('https://pdf-to-mcq.adnenl.workers.dev', {
+    const workerUrl = process.env.NEXT_PUBLIC_WORKER_URL;
+    if (!workerUrl) {
+      throw new Error("NEXT_PUBLIC_WORKER_URL is not defined in the environment variables");
+    }
+
+    const workerResponse = await fetch(workerUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chunks: chunks}),
+      body: JSON.stringify({ chunks: chunks }),
     });
     
     // Handle response
