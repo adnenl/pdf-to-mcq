@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+PDF to MCQ Quiz Generator
+A web application that automatically generates multiple-choice questions from uploaded PDF documents using AI. Perfect for students, teachers, or anyone who wants to create quizzes from educational materials.
 
-## Getting Started
+Features
+PDF Upload: Easily upload PDF documents
+AI-Powered Question Generation: Automatically creates multiple-choice questions based on document content
+Interactive Quiz Interface: Take quizzes with immediate feedback
+Question Review: Review your answers and see correct solutions
+Mobile Responsive: Works on desktop and mobile devices
+Technology Stack
+Frontend: Next.js 15, React, Tailwind CSS
+PDF Processing: LangChain Document Loaders
+AI: Cloudflare Workers AI (Llama 3.1 model)
+State Management: Zustand
+Getting Started
+Prerequisites
+Node.js 18+
+pnpm (preferred) or npm/yarn
+Cloudflare account (for Worker deployment)
+Installation
+Clone the repository
 
-First, run the development server:
+Install dependencies
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Create a .env.local file with your Cloudflare credentials
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Start the development server
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Open http://localhost:3000 to view the application
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Cloudflare Worker Setup
+This project uses a Cloudflare Worker to process PDF chunks and generate questions using AI.
 
-## Learn More
+Deploy the Worker with Wrangler:
 
-To learn more about Next.js, take a look at the following resources:
+Enable Cloudflare AI for the Worker from the Cloudflare dashboard
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Update the Worker URL in route.ts if necessary
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Usage
+Upload a PDF: Click on the file upload area or drag and drop a PDF
+Wait for Processing: The app will extract text and generate questions
+Start Quiz: Once questions are generated, click "Start Quiz"
+Answer Questions: Select your answers for each question
+Check Answers: See immediate feedback on your selected answers
+Complete Quiz: Review your final score
+Project Structure
+How It Works
+PDF Processing: The application extracts text from uploaded PDFs using LangChain's document loaders.
+Text Chunking: The extracted text is split into manageable chunks.
+Question Generation: The chunks are sent to a Cloudflare Worker that uses Llama 3.1 to generate multiple-choice questions.
+Quiz Interface: The generated questions are displayed in an interactive quiz interface.
+Feedback: Users receive immediate feedback on their answers.
+Deployment
+Vercel (Frontend)
+The easiest way to deploy the Next.js frontend:
 
-## Deploy on Vercel
+Push your code to GitHub
+Import the project in Vercel
+Set environment variables
+Deploy
+Cloudflare Workers (Backend)
+Deploy the worker using Wrangler:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+License
+MIT
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Acknowledgements
+Next.js - The React framework
+Cloudflare Workers - Serverless execution environment
+LangChain - Framework for LLM applications
+Llama 3.1 - Meta's large language model
+Created by Your Name

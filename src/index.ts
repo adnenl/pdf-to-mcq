@@ -75,6 +75,7 @@ INSTRUCTIONS:
       "D": "Fourth option"
     },
     "correctAnswer": "A"
+    "explanation": "Optional explanation for the correct answer"
   }
 ]
 4. The correctAnswer field must be one of: "A", "B", "C", or "D"

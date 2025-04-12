@@ -26,7 +26,7 @@ export default function Home() {
   };
 
   return (
-    <div>
+    <div className="max-w-3xl mx-auto p-6">
     <FileUploader onQuestionsGenerated={handleQuestionsGenerated} />
     <Button onClick={handleStartQuiz} disabled={questions.length === 0}>
       Start Quiz
